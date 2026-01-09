@@ -54,7 +54,7 @@ export default function RecurringTransactionsPage() {
                 />
                 <MetricCard
                     title="Monthly Fixed Balance"
-                    value={`$${(incomes.reduce((s, t) => s + t.amount, 0) - expenses.reduce((s, t) => s + t.amount, 0)).toLocaleString()}`}
+                    value={`₹${(incomes.reduce((s, t) => s + t.amount, 0) - expenses.reduce((s, t) => s + t.amount, 0)).toLocaleString('en-IN')}`}
                     icon={ArrowRightLeft}
                     description="Net recurring cash flow"
                 />

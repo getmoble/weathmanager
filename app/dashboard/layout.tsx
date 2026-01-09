@@ -21,6 +21,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/components/AuthContext";
 import { Separator } from "@/components/ui/separator";
+import { ModeToggle } from "@/components/ModeToggle";
 
 const items = [
     {
@@ -132,11 +133,11 @@ export default function DashboardLayout({
                 <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
                     <SidebarTrigger className="-ml-1" />
                     <Separator orientation="vertical" className="mr-2 h-4" />
-                    <div className="flex-1">
-                        {/* Breacrumbs could go here */}
+                    <div className="flex-1 flex items-center justify-between">
                         <h1 className="text-lg font-semibold capitalize">
                             {pathname.split('/').pop()?.replace(/-/g, ' ') || 'Dashboard'}
                         </h1>
+                        <ModeToggle />
                     </div>
                 </header>
                 <div className="flex-1 space-y-4 p-4 pt-6">

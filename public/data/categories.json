@@ -1,0 +1,18 @@
+{
+    "income": [
+        "Salary",
+        "Dividends",
+        "Freelance",
+        "Rental",
+        "Sold Assets"
+    ],
+    "expense": [
+        "Food & Dining",
+        "Rent",
+        "Utilities",
+        "Transport",
+        "Shopping",
+        "Entertainment",
+        "Health"
+    ]
+}

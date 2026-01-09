@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import { MetricCard } from "@/components/MetricCard";
 import { TransactionTable } from "@/components/TransactionTable";
+import { SingleTransactionModal } from "@/components/SingleTransactionModal";
+import { MultipleTransactionsModal } from "@/components/MultipleTransactionsModal";
+import { SmartOCRModal } from "@/components/SmartOCRModal";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTransactions } from "@/lib/mockTransactionData";
 import { Transaction } from "@/types/types";
@@ -63,6 +66,11 @@ export default function IncomeDashboardPage() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <h1 className="text-3xl font-bold">Income Analysis</h1>
+                <div className="flex items-center gap-2">
+                    <SingleTransactionModal type="income" />
+                    <MultipleTransactionsModal />
+                    <SmartOCRModal />
+                </div>
             </div>
 
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

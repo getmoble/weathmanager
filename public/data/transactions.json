@@ -1,0 +1,79 @@
+[
+    {
+        "id": "1",
+        "date": "2026-01-09T18:00:00.000Z",
+        "type": "income",
+        "category": "Salary",
+        "amount": 150000,
+        "description": "Monthly Salary - HDFC Bank",
+        "isRecurring": true,
+        "acknowledged": true,
+        "createdAt": "2026-01-09T18:00:00.000Z"
+    },
+    {
+        "id": "2",
+        "date": "2026-01-08T18:00:00.000Z",
+        "type": "expense",
+        "category": "Food & Dining",
+        "amount": 1250,
+        "description": "Zomato - Dinner Order",
+        "isRecurring": false,
+        "acknowledged": true,
+        "createdAt": "2026-01-09T18:00:00.000Z"
+    },
+    {
+        "id": "3",
+        "date": "2026-01-07T18:00:00.000Z",
+        "type": "investment",
+        "category": "Mutual Funds",
+        "amount": 25000,
+        "description": "SIP - Quant Small Cap Fund",
+        "isRecurring": true,
+        "acknowledged": true,
+        "createdAt": "2026-01-09T18:00:00.000Z"
+    },
+    {
+        "id": "4",
+        "date": "2026-01-06T18:00:00.000Z",
+        "type": "expense",
+        "category": "Shopping",
+        "amount": 4500,
+        "description": "Reliance Digital - Accessories",
+        "isRecurring": false,
+        "acknowledged": true,
+        "createdAt": "2026-01-09T18:00:00.000Z"
+    },
+    {
+        "id": "5",
+        "date": "2026-01-05T18:00:00.000Z",
+        "type": "expense",
+        "category": "Utilities",
+        "amount": 2800,
+        "description": "BESCOM - Electricity Bill",
+        "isRecurring": true,
+        "acknowledged": true,
+        "createdAt": "2026-01-09T18:00:00.000Z"
+    },
+    {
+        "id": "6",
+        "date": "2026-01-04T18:00:00.000Z",
+        "type": "expense",
+        "category": "Transport",
+        "amount": 650,
+        "description": "Uber - Office Commute",
+        "isRecurring": false,
+        "acknowledged": true,
+        "createdAt": "2026-01-09T18:00:00.000Z"
+    },
+    {
+        "id": "7",
+        "date": "2026-01-03T18:00:00.000Z",
+        "type": "income",
+        "category": "Dividend",
+        "amount": 1200,
+        "description": "TCS - Interim Dividend",
+        "isRecurring": false,
+        "acknowledged": true,
+        "createdAt": "2026-01-09T18:00:00.000Z"
+    }
+]

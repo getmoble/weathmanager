@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "name": "Zerodha",
+        "status": "connected",
+        "lastSync": "2 mins ago",
+        "syncEnabled": true
+    },
+    {
+        "id": 2,
+        "name": "Upstox",
+        "status": "disconnected",
+        "lastSync": "Never",
+        "syncEnabled": false
+    },
+    {
+        "id": 3,
+        "name": "Groww",
+        "status": "not_linked",
+        "lastSync": "N/A",
+        "syncEnabled": false
+    }
+]

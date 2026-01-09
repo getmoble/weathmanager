@@ -122,7 +122,7 @@ export default function DashboardPage() {
                                         <p className="text-xs text-muted-foreground">{t.category} • {new Date(t.date).toLocaleDateString()}</p>
                                     </div>
                                     <div className={`ml-auto font-medium ${t.type === 'income' ? 'text-green-500' : 'text-red-500'}`}>
-                                        {t.type === 'income' ? '+' : '-'}${t.amount.toLocaleString()}
+                                        {t.type === 'income' ? '+' : '-'}₹{t.amount.toLocaleString('en-IN')}
                                     </div>
                                 </div>
                             ))}

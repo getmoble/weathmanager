@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { MetricCard } from "@/components/MetricCard";
 import { TransactionTable } from "@/components/TransactionTable";
 import { ExpenseReductionSuggestion } from "@/components/ExpenseReductionSuggestion";
-import { AddTransactionDialog } from "@/components/AddTransactionDialog";
+import { SingleTransactionModal } from "@/components/SingleTransactionModal";
+import { MultipleTransactionsModal } from "@/components/MultipleTransactionsModal";
+import { SmartOCRModal } from "@/components/SmartOCRModal";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTransactions } from "@/lib/mockTransactionData";
 import { generateExpenseSuggestions } from "@/lib/expenseAnalysis";
@@ -69,7 +71,11 @@ export default function ExpenseDashboardPage() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <h1 className="text-3xl font-bold">Expense Tracking</h1>
-                <AddTransactionDialog />
+                <div className="flex items-center gap-2">
+                    <SingleTransactionModal type="expense" />
+                    <MultipleTransactionsModal />
+                    <SmartOCRModal />
+                </div>
             </div>
 
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
