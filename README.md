@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Wealth Manager 🇮🇳
 
-## Getting Started
+A premium personal finance and wealth orchestration platform tailored for the Indian market. Track income, manage expenses with AI-powered insights, and analyze Indian equities with professional-grade technical and fundamental engines.
 
-First, run the development server:
+## ✨ Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **🌓 Dynamic Theme Switching**: Seamlessly toggle between Light and Dark modes with persistent user preference.
+- **🏦 Advanced Management**: Dedicated settings for managing Bank Accounts, Income/Expense Categories, and Broker connections (Zerodha, Upstox, etc.).
+- **📊 Professional Analysis**:
+  - **Fundamental**: Scoring based on Market Cap tiers, TBTF (Too Big To Fail) rating, and valuation benchmarks.
+  - **Technical**: Real-time indicators including SMA 50/200, RSI, and MACD.
+- **📥 Smart Entry System**: Manual single entry, Excel-style bulk entry, and AI-powered OCR scanning for receipts/screenshots.
+- **🇮🇳 Localization**: Full support for Indian Rupee (₹) and `en-IN` number formatting.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🏗️ Architecture
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The application uses a **Mock API Architecture** to simulate a real-world production environment:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Data Service Layer**: Centralized [`lib/dataService.ts`](file:///e:/weathmanager/weathmanager/lib/dataService.ts) handles all data fetching asynchronously.
+- **Externalized Data**: All mock data is stored as JSON files in [`public/data/`](file:///e:/weathmanager/weathmanager/public/data/), allowing for easy updates and future backend integration.
+- **Tech Stack**: Next.js 16 (App Router), TypeScript, Tailwind CSS, Shadcn UI, Recharts, Tesseract.js.
 
-## Learn More
+## 🚀 Getting Started
 
-To learn more about Next.js, take a look at the following resources:
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Run Development Server**:
+   ```bash
+   npm run dev
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. **Access the App**:
+   Open [http://localhost:3000](http://localhost:3000) and login with `admin`/`admin`.
 
-## Deploy on Vercel
+## 📂 Documentation
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [Product Requirements](file:///e:/weathmanager/weathmanager/docs/requirements.md)
+- [Implementation Plan](file:///e:/weathmanager/weathmanager/docs/implementation-plan.md)
+- [Tasks & Roadmap](file:///e:/weathmanager/weathmanager/docs/tasks.md)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

@@ -60,7 +60,13 @@ Centralized management for financial entities and metadata:
 
 ## 3. Application Architecture
 
-### 3.1 Page Specifications
+### 3.1 Data Architecture (Mock API)
+The application implements an **API-first abstraction layer** even while running with local data:
+- **Service Pattern**: All components consume data via the `DataService`, which abstracts the underlying data source.
+- **JSON Store**: Mock data is externalized into JSON files located in `public/data/` (e.g., `transactions.json`, `stocks.json`).
+- **Async Flow**: Fetches are performed via asynchronous `fetch` calls to local routes, ensuring the UI develops reactive loading patterns ready for real REST/GraphQL integration.
+
+### 3.2 Page Specifications
 - **Overview Dashboard**: High-level metrics for Total Income, Expenses, and Net Worth.
 - **Opportunities List**: Searchable grid of analyzed stocks with real-time badges.
 - **Stock Detail**: Tabbed view for deep Fundamental vs. Technical data visualization.
