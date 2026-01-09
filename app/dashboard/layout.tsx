@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { User, CreditCard, PieChart, TrendingUp, Settings, BarChart2, Repeat, FileText, Target } from "lucide-react";
+import { User, CreditCard, PieChart, TrendingUp, Settings, BarChart2, Repeat, FileText, Target, Landmark } from "lucide-react";
 import {
     Sidebar,
     SidebarContent,
@@ -38,6 +38,11 @@ const items = [
         title: "Goals",
         url: "/dashboard/goals",
         icon: Target,
+    },
+    {
+        title: "Assets",
+        url: "/dashboard/assets",
+        icon: Landmark,
     },
     {
         title: "Reports",

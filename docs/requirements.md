@@ -51,11 +51,12 @@ Uses 200+ days of historical data:
   - **HOLD**: Score between 40 and 70.
 
 ### 2.5 Advanced Management & Settings
-Centralized management for financial entities and metadata:
-- **Bank Accounts**: Link and track multiple bank accounts and cards with localized balance views.
-- **Dynamic Categories**: Fully customizable Income and Expense category lists.
-- **Broker Integration**: Management layer for connecting and syncing with Indian stock brokers (e.g., Zerodha, Upstox).
-- **Financial Goal Tracking**: Lifecycle management for major milestones (Education, Marriage, Retirement) with progress visualization and inflation-adjusted targets.
+Centralized management for financial entities and metadata, organized via a **Vertical Navigation** system:
+- **Financial Goal Tracking**: Lifecycle management for major milestones (Education, Marriage, Retirement) with progress visualization.
+- **Asset Management**: Tracking of physical and fixed-income assets (Real Estate, Gold, Vehicles) with automated appreciation calculations and cost-basis analysis.
+- **Broker Integration**: Connection management for Indian stock brokers.
+- **Separate Categories**: Dedicated management for **Income Categories** and **Expense Categories** to prevent misclassification.
+- **Bank Accounts**: Link and track multiple bank accounts with localized Indian numbering formatting.
 
 ---
 
@@ -74,8 +75,9 @@ The application implements an **API-first abstraction layer** even while running
 - **Recurring Manager**: A stateful acknowledge/ignore system for automated transactions.
 - **Monthly Reports**: Generates a **Financial Health Score** based on savings rate and investment allocation.
 
-### 3.2 UI/UX Principles
 - **Aesthetic**: Premium design with full support for **Dark and Light modes**. Use vibrant accents (Emerald for income, Rose for expenses, Blue for investments).
+- **Settings Layout**: Uses a **Left-Sidebar Vertical Tabs** pattern on desktop for scalability.
+- **Navigation Priority**: Sidebar organized by utility: 1. Overview, 2. Opportunities, 3. Goals, 4. Reports.
 - **Theme Management**: Persistent theme selection using `next-themes`, defaulting to dark.
 - **Responsiveness**: Mobile-first design using Shadcn UI components.
 - **Localization**: All currency displayed in `₹` using `toLocaleString('en-IN')`.

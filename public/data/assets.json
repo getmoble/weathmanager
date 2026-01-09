@@ -1,0 +1,40 @@
+[
+    {
+        "id": "as-001",
+        "name": "Luxury Apartment (Bangalore)",
+        "type": "Real Estate",
+        "currentValue": 25000000,
+        "purchaseValue": 18000000,
+        "purchaseDate": "2018-05-15",
+        "location": "Sarjapur Road, Bangalore",
+        "notes": "Rented out for ₹65k/month"
+    },
+    {
+        "id": "as-002",
+        "name": "Gold SGB - Series I",
+        "type": "Gold",
+        "currentValue": 1250000,
+        "purchaseValue": 1000000,
+        "purchaseDate": "2020-07-20",
+        "notes": "2.5% semi-annual interest"
+    },
+    {
+        "id": "as-003",
+        "name": "BMW X5",
+        "type": "Vehicle",
+        "currentValue": 4500000,
+        "purchaseValue": 8500000,
+        "purchaseDate": "2021-03-10",
+        "notes": "Regular maintenance done"
+    },
+    {
+        "id": "as-004",
+        "name": "Commercial Shop (Delhi)",
+        "type": "Real Estate",
+        "currentValue": 15000000,
+        "purchaseValue": 12000000,
+        "purchaseDate": "2015-11-12",
+        "location": "Connaught Place, Delhi",
+        "notes": "Self-occupied"
+    }
+]

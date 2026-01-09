@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Plus, Building2, Wallet, Layers, Link2, Trash2, Edit2, CheckCircle2, AlertCircle, TrendingUp, CreditCard, Target, Settings as SettingsIcon } from "lucide-react";
+import { Plus, Building2, Wallet, Layers, Link2, Trash2, Edit2, CheckCircle2, AlertCircle, TrendingUp, CreditCard, Target, Landmark, Coins, Car, Settings as SettingsIcon } from "lucide-react";
 
 export default function SettingsPage() {
     return (
@@ -19,43 +19,63 @@ export default function SettingsPage() {
                 <p className="text-muted-foreground">Manage your bank accounts, categories, and broker connections.</p>
             </div>
 
-            <Tabs defaultValue="goals" className="flex flex-col md:flex-row gap-8">
-                <TabsList className="flex flex-col h-auto bg-transparent border-none md:border-r rounded-none p-0 items-start space-y-1 w-full md:w-64 shrink-0">
+            <Tabs defaultValue="goals" className="flex flex-col md:flex-row gap-0 border rounded-xl overflow-hidden bg-white dark:bg-zinc-950">
+                <TabsList className="flex flex-col h-auto bg-slate-50/50 dark:bg-zinc-900/50 border-r rounded-none p-1 items-start space-y-0 w-full md:w-48 shrink-0">
                     <TabsTrigger
                         value="goals"
-                        className="w-full justify-start gap-3 px-4 h-10 data-[state=active]:bg-muted data-[state=active]:shadow-none hover:bg-muted/50 transition-colors"
+                        className="w-full justify-start gap-2 px-3 h-8 text-xs font-medium data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-950 data-[state=active]:shadow-xs data-[state=active]:text-primary rounded-md transition-all"
                     >
-                        <Target className="h-4 w-4" /> Goals
+                        Goals
                     </TabsTrigger>
                     <TabsTrigger
-                        value="brokers"
-                        className="w-full justify-start gap-3 px-4 h-10 data-[state=active]:bg-muted data-[state=active]:shadow-none hover:bg-muted/50 transition-colors"
+                        value="assets"
+                        className="w-full justify-start gap-2 px-3 h-8 text-xs font-medium data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-950 data-[state=active]:shadow-xs data-[state=active]:text-primary rounded-md transition-all"
                     >
-                        <Link2 className="h-4 w-4" /> Brokers
+                        Assets
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value="asset-categories"
+                        className="w-full justify-start gap-2 px-3 h-8 text-xs font-medium data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-950 data-[state=active]:shadow-xs data-[state=active]:text-primary rounded-md transition-all"
+                    >
+                        Asset Categories
                     </TabsTrigger>
                     <TabsTrigger
                         value="income-categories"
-                        className="w-full justify-start gap-3 px-4 h-10 data-[state=active]:bg-muted data-[state=active]:shadow-none hover:bg-muted/50 transition-colors"
+                        className="w-full justify-start gap-2 px-3 h-8 text-xs font-medium data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-950 data-[state=active]:shadow-xs data-[state=active]:text-primary rounded-md transition-all"
                     >
-                        <TrendingUp className="h-4 w-4 text-emerald-500" /> Income Categories
+                        Income Categories
                     </TabsTrigger>
                     <TabsTrigger
                         value="expense-categories"
-                        className="w-full justify-start gap-3 px-4 h-10 data-[state=active]:bg-muted data-[state=active]:shadow-none hover:bg-muted/50 transition-colors"
+                        className="w-full justify-start gap-2 px-3 h-8 text-xs font-medium data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-950 data-[state=active]:shadow-xs data-[state=active]:text-primary rounded-md transition-all"
                     >
-                        <CreditCard className="h-4 w-4 text-rose-500" /> Expense Categories
+                        Expense Categories
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value="brokers"
+                        className="w-full justify-start gap-2 px-3 h-8 text-xs font-medium data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-950 data-[state=active]:shadow-xs data-[state=active]:text-primary rounded-md transition-all"
+                    >
+                        Brokers
                     </TabsTrigger>
                     <TabsTrigger
                         value="banks"
-                        className="w-full justify-start gap-3 px-4 h-10 data-[state=active]:bg-muted data-[state=active]:shadow-none hover:bg-muted/50 transition-colors"
+                        className="w-full justify-start gap-2 px-3 h-8 text-xs font-medium data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-950 data-[state=active]:shadow-xs data-[state=active]:text-primary rounded-md transition-all"
                     >
-                        <Building2 className="h-4 w-4" /> Banks
+                        Banks
                     </TabsTrigger>
                 </TabsList>
 
-                <div className="flex-1">
+                <div className="flex-1 p-5 bg-white dark:bg-zinc-950 overflow-y-auto">
                     <TabsContent value="goals" className="mt-0 space-y-4 font-normal">
                         <GoalManagement />
+                    </TabsContent>
+
+                    <TabsContent value="assets" className="mt-0 space-y-4">
+                        <AssetManagement />
+                    </TabsContent>
+
+                    <TabsContent value="asset-categories" className="mt-0 space-y-4">
+                        <AssetCategoryManagement />
                     </TabsContent>
 
                     <TabsContent value="brokers" className="mt-0 space-y-4">
@@ -142,6 +162,74 @@ function GoalManagement() {
     );
 }
 
+
+function AssetManagement() {
+    const [assets, setAssets] = useState<any[]>([]);
+
+    useEffect(() => {
+        DataService.getAssets().then(setAssets);
+    }, []);
+
+    const getIcon = (type: string) => {
+        switch (type) {
+            case "Real Estate": return <Building2 className="h-4 w-4" />
+            case "Gold": return <Coins className="h-4 w-4" />
+            case "Vehicle": return <Car className="h-4 w-4" />
+            default: return <Landmark className="h-4 w-4" />
+        }
+    }
+
+    return (
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {assets.map((asset) => (
+                <Card key={asset.id} className="relative overflow-hidden border-primary/20">
+                    <CardHeader className="pb-2">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                {getIcon(asset.type)}
+                                <CardTitle className="text-lg">{asset.name}</CardTitle>
+                            </div>
+                            <Badge variant="outline">{asset.type}</Badge>
+                        </div>
+                        <CardDescription>{asset.location || 'Fixed Asset'}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                            <div className="flex justify-between text-sm">
+                                <span className="text-muted-foreground">Current Value</span>
+                                <span className="font-semibold text-emerald-500">₹{asset.currentValue.toLocaleString('en-IN')}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                                <span className="text-muted-foreground">Cost Basis</span>
+                                <span className="font-semibold">₹{asset.purchaseValue.toLocaleString('en-IN')}</span>
+                            </div>
+                        </div>
+                        {asset.notes && (
+                            <p className="text-xs text-muted-foreground italic border-l-2 pl-2 border-muted mt-2">
+                                {asset.notes}
+                            </p>
+                        )}
+                    </CardContent>
+                    <CardFooter className="flex justify-between border-t p-3 bg-muted/30">
+                        <Button variant="ghost" size="sm" className="gap-2">
+                            <Edit2 className="h-3 w-3" /> Edit
+                        </Button>
+                        <Button variant="ghost" size="sm" className="gap-2 text-destructive hover:text-destructive">
+                            <Trash2 className="h-3 w-3" /> Deactivate
+                        </Button>
+                    </CardFooter>
+                </Card>
+            ))}
+            <Card className="border-dashed flex items-center justify-center py-10 cursor-pointer hover:bg-muted/50 transition-colors">
+                <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                    <Plus className="h-8 w-8" />
+                    <span className="font-medium">Add New Asset</span>
+                </div>
+            </Card>
+        </div>
+    );
+}
+
 function BankManagement() {
     const [banks, setBanks] = useState<any[]>([]);
 
@@ -182,6 +270,41 @@ function BankManagement() {
                 </div>
             </Card>
         </div>
+    );
+}
+
+function AssetCategoryManagement() {
+    const [categories, setCategories] = useState<string[]>([]);
+
+    useEffect(() => {
+        DataService.getCategories().then(data => setCategories((data as any).assets || []));
+    }, []);
+
+    return (
+        <Card>
+            <CardHeader className="pb-4">
+                <CardTitle className="text-lg flex items-center gap-2">
+                    <Landmark className="h-5 w-5 text-blue-500" />
+                    Asset Categories
+                </CardTitle>
+                <CardDescription>Manage types for your physical and digital assets (e.g. Real Estate, Cars).</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-1">
+                {categories.map(cat => (
+                    <div key={cat} className="flex items-center justify-between group py-1 px-2 hover:bg-muted/50 rounded-md transition-colors">
+                        <span className="text-sm">{cat}</span>
+                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Button variant="ghost" size="icon" className="h-6 w-6"><Edit2 className="h-3 w-3" /></Button>
+                            <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive"><Trash2 className="h-3 w-3" /></Button>
+                        </div>
+                    </div>
+                ))}
+                <div className="pt-3 flex gap-2">
+                    <Input placeholder="New type (e.g. Crypto)" className="h-8 text-xs" />
+                    <Button size="sm" className="h-8 px-3">Add</Button>
+                </div>
+            </CardContent>
+        </Card>
     );
 }
 

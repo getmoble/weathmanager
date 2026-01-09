@@ -127,6 +127,16 @@ export interface OCRResult {
   confidence: number; // 0-1
   rawText: string;
 }
+export interface Asset {
+  id: string;
+  name: string;
+  type: string; // Real Estate, Gold, Crypto, etc.
+  currentValue: number;
+  purchaseValue: number;
+  purchaseDate: string;
+  location?: string;
+  notes?: string;
+}
 export interface Goal {
   id: string;
   name: string;

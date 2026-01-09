@@ -12,6 +12,7 @@ A premium personal finance and wealth orchestration platform tailored for the In
   - **Technical**: Real-time indicators including SMA 50/200, RSI, and MACD.
 - **📉 Smart Entry System**: Manual single entry, Excel-style bulk entry, and AI-powered OCR scanning for receipts/screenshots.
 - **🎯 Goal Tracking**: Dedicated dashboard for monitoring life milestones with progress visualization and automated SIP tracking.
+- **🏠 Asset Management**: Track non-equity holdings (Real Estate, Gold, Vehicles) with appreciation metrics and net-worth allocation.
 - **🇮🇳 Localization**: Full support for Indian Rupee (₹) and `en-IN` number formatting.
 
 ## 🏗️ Architecture
