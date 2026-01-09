@@ -4,7 +4,7 @@
         "name": "HDFC Bank",
         "type": "Savings",
         "last4": "8821",
-        "balance": 125400,
+        "balance": 450000,
         "primary": true
     },
     {
@@ -12,7 +12,7 @@
         "name": "ICICI Bank",
         "type": "Current",
         "last4": "4412",
-        "balance": 45200,
+        "balance": 210000,
         "primary": false
     },
     {
@@ -20,7 +20,7 @@
         "name": "SBI Card",
         "type": "Credit Card",
         "last4": "0092",
-        "balance": -12500,
+        "balance": -45000,
         "primary": false
     }
 ]

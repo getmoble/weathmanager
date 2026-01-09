@@ -5,11 +5,13 @@ A premium personal finance and wealth orchestration platform tailored for the In
 ## ✨ Key Features
 
 - **🌓 Dynamic Theme Switching**: Seamlessly toggle between Light and Dark modes with persistent user preference.
-- **🏦 Advanced Management**: Dedicated settings for managing Bank Accounts, Income/Expense Categories, and Broker connections (Zerodha, Upstox, etc.).
+- **⚙️ Premium Settings Experience**: Redesigned **Vertical Tabs** layout for managing Bank Accounts, Brokers, and separate Income/Expense categories with fixed heights for UI stability.
+- **🧭 Optimized Navigation**: Reorganized sidebar logic focusing on high-priority modules (Overview > Opportunities > Goals).
 - **📊 Professional Analysis**:
   - **Fundamental**: Scoring based on Market Cap tiers, TBTF (Too Big To Fail) rating, and valuation benchmarks.
   - **Technical**: Real-time indicators including SMA 50/200, RSI, and MACD.
-- **📥 Smart Entry System**: Manual single entry, Excel-style bulk entry, and AI-powered OCR scanning for receipts/screenshots.
+- **📉 Smart Entry System**: Manual single entry, Excel-style bulk entry, and AI-powered OCR scanning for receipts/screenshots.
+- **🎯 Goal Tracking**: Dedicated dashboard for monitoring life milestones with progress visualization and automated SIP tracking.
 - **🇮🇳 Localization**: Full support for Indian Rupee (₹) and `en-IN` number formatting.
 
 ## 🏗️ Architecture

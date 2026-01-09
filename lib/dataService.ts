@@ -1,4 +1,4 @@
-import { Transaction, RecurringTransaction, Stock } from '@/types/types';
+import { Transaction, RecurringTransaction, Stock, Goal } from '@/types/types';
 
 /**
  * DataService simulates an API layer by fetching local JSON files.
@@ -25,6 +25,8 @@ export const DataService = {
     getBrokers: () => fetchFromApi<any[]>('brokers.json'),
 
     getCategories: () => fetchFromApi<{ income: string[], expense: string[] }>('categories.json'),
+
+    getGoals: () => fetchFromApi<Goal[]>('goals.json'),
 
     // Simulated POST methods (logic for local state would normally be more complex)
     addTransaction: async (tx: Transaction): Promise<Transaction> => {

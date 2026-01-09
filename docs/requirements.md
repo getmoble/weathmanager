@@ -55,6 +55,7 @@ Centralized management for financial entities and metadata:
 - **Bank Accounts**: Link and track multiple bank accounts and cards with localized balance views.
 - **Dynamic Categories**: Fully customizable Income and Expense category lists.
 - **Broker Integration**: Management layer for connecting and syncing with Indian stock brokers (e.g., Zerodha, Upstox).
+- **Financial Goal Tracking**: Lifecycle management for major milestones (Education, Marriage, Retirement) with progress visualization and inflation-adjusted targets.
 
 ---
 
@@ -109,6 +110,20 @@ interface Stock {
   fundamentals: FundamentalMetrics;
   technicals: TechnicalIndicators;
 }
+
+### Financial Goal
+```typescript
+interface Goal {
+  id: string;
+  name: string;
+  description: string;
+  currentAmount: number;
+  targetAmount: number;
+  targetYear: number;
+  status: 'todo' | 'in-progress' | 'achieved';
+  monthlyContribution: number;
+}
+```
 ```
 
 ---

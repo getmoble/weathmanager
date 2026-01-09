@@ -1,79 +1,101 @@
 [
     {
         "id": "1",
-        "date": "2026-01-09T18:00:00.000Z",
+        "date": "2026-01-01T00:00:00.000Z",
         "type": "income",
         "category": "Salary",
-        "amount": 150000,
-        "description": "Monthly Salary - HDFC Bank",
+        "amount": 250000,
+        "description": "Monthly Salary",
         "isRecurring": true,
         "acknowledged": true,
-        "createdAt": "2026-01-09T18:00:00.000Z"
+        "createdAt": "2026-01-01T00:00:00.000Z"
     },
     {
         "id": "2",
-        "date": "2026-01-08T18:00:00.000Z",
+        "date": "2026-01-05T00:00:00.000Z",
         "type": "expense",
-        "category": "Food & Dining",
-        "amount": 1250,
-        "description": "Zomato - Dinner Order",
-        "isRecurring": false,
+        "category": "Housing",
+        "amount": 29955,
+        "description": "Home Loan EMI",
+        "isRecurring": true,
         "acknowledged": true,
-        "createdAt": "2026-01-09T18:00:00.000Z"
+        "createdAt": "2026-01-01T00:00:00.000Z"
     },
     {
         "id": "3",
-        "date": "2026-01-07T18:00:00.000Z",
+        "date": "2026-01-15T00:00:00.000Z",
         "type": "investment",
-        "category": "Mutual Funds",
-        "amount": 25000,
-        "description": "SIP - Quant Small Cap Fund",
-        "isRecurring": true,
+        "category": "Insurance",
+        "amount": 10580,
+        "description": "LIC Premium Payment",
+        "isRecurring": false,
         "acknowledged": true,
-        "createdAt": "2026-01-09T18:00:00.000Z"
+        "createdAt": "2026-01-01T00:00:00.000Z"
     },
     {
         "id": "4",
-        "date": "2026-01-06T18:00:00.000Z",
+        "date": "2026-02-15T00:00:00.000Z",
         "type": "expense",
-        "category": "Shopping",
-        "amount": 4500,
-        "description": "Reliance Digital - Accessories",
+        "category": "Automobile",
+        "amount": 25000,
+        "description": "Jeep Maintenance",
         "isRecurring": false,
         "acknowledged": true,
-        "createdAt": "2026-01-09T18:00:00.000Z"
+        "createdAt": "2026-01-01T00:00:00.000Z"
     },
     {
         "id": "5",
-        "date": "2026-01-05T18:00:00.000Z",
-        "type": "expense",
-        "category": "Utilities",
-        "amount": 2800,
-        "description": "BESCOM - Electricity Bill",
-        "isRecurring": true,
+        "date": "2026-03-10T00:00:00.000Z",
+        "type": "investment",
+        "category": "Insurance",
+        "amount": 7670,
+        "description": "LIC Premium Payment",
+        "isRecurring": false,
         "acknowledged": true,
-        "createdAt": "2026-01-09T18:00:00.000Z"
+        "createdAt": "2026-01-01T00:00:00.000Z"
     },
     {
         "id": "6",
-        "date": "2026-01-04T18:00:00.000Z",
+        "date": "2026-03-20T00:00:00.000Z",
         "type": "expense",
-        "category": "Transport",
-        "amount": 650,
-        "description": "Uber - Office Commute",
+        "category": "Insurance",
+        "amount": 31154,
+        "description": "Jeep Insurance",
         "isRecurring": false,
         "acknowledged": true,
-        "createdAt": "2026-01-09T18:00:00.000Z"
+        "createdAt": "2026-01-01T00:00:00.000Z"
     },
     {
         "id": "7",
-        "date": "2026-01-03T18:00:00.000Z",
-        "type": "income",
-        "category": "Dividend",
-        "amount": 1200,
-        "description": "TCS - Interim Dividend",
+        "date": "2026-05-05T00:00:00.000Z",
+        "type": "expense",
+        "category": "Insurance",
+        "amount": 30923,
+        "description": "Medical Insurance",
         "isRecurring": false,
         "acknowledged": true,
-        "createdAt": "2026-01-09T18:00:00.000Z"
+        "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+        "id": "8",
+        "date": "2026-05-15T00:00:00.000Z",
+        "type": "investment",
+        "category": "Insurance",
+        "amount": 28263,
+        "description": "LIC Premium Payment",
+        "isRecurring": false,
+        "acknowledged": true,
+        "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+        "id": "9",
+        "date": "2026-05-25T00:00:00.000Z",
+        "type": "expense",
+        "category": "Insurance",
+        "amount": 17243,
+        "description": "Slavia Insurance",
+        "isRecurring": false,
+        "acknowledged": true,
+        "createdAt": "2026-01-01T00:00:00.000Z"
     }
 ]

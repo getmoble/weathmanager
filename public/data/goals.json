@@ -1,0 +1,93 @@
+[
+    {
+        "id": "goal-juan-edu",
+        "name": "Juan Education",
+        "description": "Degree and Post Graduation",
+        "currentAmount": 2500000,
+        "targetAmount": 4477119,
+        "targetYear": 2036,
+        "inflationRate": 6,
+        "status": "in-progress",
+        "category": "Education",
+        "monthlyContribution": 20000,
+        "expectedReturn": 11
+    },
+    {
+        "id": "goal-emma-edu",
+        "name": "Emma Education",
+        "description": "Degree and Post Graduation",
+        "currentAmount": 2500000,
+        "targetAmount": 5652259,
+        "targetYear": 2040,
+        "inflationRate": 6,
+        "status": "in-progress",
+        "category": "Education",
+        "monthlyContribution": 15000,
+        "expectedReturn": 11
+    },
+    {
+        "id": "goal-emma-mar",
+        "name": "Emma Marriage",
+        "description": "Wedding Fund",
+        "currentAmount": 5000000,
+        "targetAmount": 14271695,
+        "targetYear": 2044,
+        "inflationRate": 6,
+        "status": "in-progress",
+        "category": "Family",
+        "monthlyContribution": 20000,
+        "expectedReturn": 11
+    },
+    {
+        "id": "goal-retire",
+        "name": "Retirement Fund",
+        "description": "Corpus for 20+ years",
+        "currentAmount": 10000000,
+        "targetAmount": 32071354,
+        "targetYear": 2046,
+        "inflationRate": 6,
+        "status": "in-progress",
+        "category": "Retirement",
+        "monthlyContribution": 40000,
+        "expectedReturn": 11
+    },
+    {
+        "id": "goal-emergency",
+        "name": "Emergency Fund",
+        "description": "6 Months of expenses",
+        "currentAmount": 600000,
+        "targetAmount": 600000,
+        "targetYear": 2026,
+        "inflationRate": 6,
+        "status": "achieved",
+        "category": "Safety",
+        "monthlyContribution": 0,
+        "expectedReturn": 5
+    },
+    {
+        "id": "goal-house",
+        "name": "House",
+        "description": "Purchase Villa",
+        "currentAmount": 10000000,
+        "targetAmount": 13382255,
+        "targetYear": 2031,
+        "inflationRate": 6,
+        "status": "in-progress",
+        "category": "Real Estate",
+        "monthlyContribution": 0,
+        "expectedReturn": 8
+    },
+    {
+        "id": "goal-car",
+        "name": "Car",
+        "description": "Buy a new Car",
+        "currentAmount": 1500000,
+        "targetAmount": 1685400,
+        "targetYear": 2028,
+        "inflationRate": 6,
+        "status": "in-progress",
+        "category": "Lifestyle",
+        "monthlyContribution": 0,
+        "expectedReturn": 5
+    }
+]

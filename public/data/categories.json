@@ -4,15 +4,19 @@
         "Dividends",
         "Freelance",
         "Rental",
-        "Sold Assets"
+        "Cashback"
     ],
     "expense": [
         "Food & Dining",
-        "Rent",
+        "Housing",
         "Utilities",
         "Transport",
         "Shopping",
-        "Entertainment",
-        "Health"
+        "Health",
+        "Insurance",
+        "Education",
+        "Maintenance",
+        "Automobile",
+        "Travel"
     ]
 }

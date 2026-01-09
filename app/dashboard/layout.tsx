@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { User, CreditCard, PieChart, TrendingUp, Settings, BarChart2, Repeat, FileText } from "lucide-react";
+import { User, CreditCard, PieChart, TrendingUp, Settings, BarChart2, Repeat, FileText, Target } from "lucide-react";
 import {
     Sidebar,
     SidebarContent,
@@ -30,6 +30,21 @@ const items = [
         icon: PieChart,
     },
     {
+        title: "Opportunities",
+        url: "/dashboard/opportunities",
+        icon: TrendingUp,
+    },
+    {
+        title: "Goals",
+        url: "/dashboard/goals",
+        icon: Target,
+    },
+    {
+        title: "Reports",
+        url: "/dashboard/reports",
+        icon: FileText,
+    },
+    {
         title: "Income",
         url: "/dashboard/income",
         icon: TrendingUp,
@@ -40,24 +55,14 @@ const items = [
         icon: CreditCard,
     },
     {
-        title: "Investments",
-        url: "/dashboard/investments",
-        icon: BarChart2,
-    },
-    {
-        title: "Opportunities",
-        url: "/dashboard/opportunities",
-        icon: TrendingUp,
-    },
-    {
         title: "Recurring",
         url: "/dashboard/recurring",
         icon: Repeat,
     },
     {
-        title: "Reports",
-        url: "/dashboard/reports",
-        icon: FileText,
+        title: "Investments",
+        url: "/dashboard/investments",
+        icon: BarChart2,
     },
     {
         title: "Settings",

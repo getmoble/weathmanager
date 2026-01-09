@@ -127,3 +127,16 @@ export interface OCRResult {
   confidence: number; // 0-1
   rawText: string;
 }
+export interface Goal {
+  id: string;
+  name: string;
+  description: string;
+  currentAmount: number; // Present value of earmarked funds
+  targetAmount: number; // Future value required
+  targetYear: number;
+  inflationRate: number;
+  status: 'todo' | 'in-progress' | 'achieved';
+  category: string;
+  monthlyContribution: number;
+  expectedReturn: number;
+}
