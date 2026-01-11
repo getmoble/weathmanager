@@ -16,31 +16,44 @@ A premium personal finance and wealth orchestration platform tailored for the In
 - **🇮🇳 Localization**: Full support for Indian Rupee (₹) and `en-IN` number formatting.
 
 ## 🏗️ Architecture
-
-The application uses a **Mock API Architecture** to simulate a real-world production environment:
-
-- **Data Service Layer**: Centralized [`lib/dataService.ts`](file:///e:/weathmanager/weathmanager/lib/dataService.ts) handles all data fetching asynchronously.
-- **Externalized Data**: All mock data is stored as JSON files in [`public/data/`](file:///e:/weathmanager/weathmanager/public/data/), allowing for easy updates and future backend integration.
-- **Tech Stack**: Next.js 16 (App Router), TypeScript, Tailwind CSS, Shadcn UI, Recharts, Tesseract.js.
+ 
+ The application uses a **Modern Full-Stack Architecture** with real database persistence:
+ 
+ - **Database Layer**: **PostgreSQL** managed via **Drizzle ORM** for type-safe database interactions.
+ - **Server Actions**: Direct server-side logic in [`lib/actions.ts`](file:///c:/code/weathmanager/lib/actions.ts) for secure and efficient data mutations for all functional modules (Assets, Banks, Goals, etc.).
+ - **Data Service**: Centralized data fetching patterns.
+ - **Tech Stack**: Next.js 16 (App Router), TypeScript, Drizzle ORM, PostgreSQL, Tailwind CSS v4, Shadcn UI, Recharts, Tesseract.js.
 
 ## 🚀 Getting Started
 
 1. **Install Dependencies**:
-   ```bash
-   npm install
-   ```
-
-2. **Run Development Server**:
-   ```bash
-   npm run dev
-   ```
-
-3. **Access the App**:
-   Open [http://localhost:3000](http://localhost:3000) and login with `admin`/`admin`.
+    ```bash
+    npm install
+    ```
+ 
+ 2. **Database Setup**:
+    Ensure you have a PostgreSQL instance running (default: `postgres://postgres:postgres@127.0.0.1:5432/wealthmanager`).
+    
+    Sync the database schema:
+    ```bash
+    npm run db:push
+    ```
+    
+    Seed initial data:
+    ```bash
+    npm run db:seed
+    ```
+ 
+ 3. **Run Development Server**:
+    ```bash
+    npm run dev
+    ```
+ 
+ 4. **Access the App**:
+    Open [http://localhost:3000](http://localhost:3000) and login with `admin`/`admin`.
 
 ## 📂 Documentation
 
-- [Product Requirements](file:///e:/weathmanager/weathmanager/docs/requirements.md)
-- [Implementation Plan](file:///e:/weathmanager/weathmanager/docs/implementation-plan.md)
-- [Tasks & Roadmap](file:///e:/weathmanager/weathmanager/docs/tasks.md)
+- [Product Requirements](file:///c:/code/weathmanager/docs/requirements.md)
+- [Database Schema](file:///c:/code/weathmanager/lib/db/schema.ts)
 

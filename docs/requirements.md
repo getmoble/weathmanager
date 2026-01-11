@@ -62,11 +62,12 @@ Centralized management for financial entities and metadata, organized via a **Ve
 
 ## 3. Application Architecture
 
-### 3.1 Data Architecture (Mock API)
-The application implements an **API-first abstraction layer** even while running with local data:
-- **Service Pattern**: All components consume data via the `DataService`, which abstracts the underlying data source.
-- **JSON Store**: Mock data is externalized into JSON files located in `public/data/` (e.g., `transactions.json`, `stocks.json`).
-- **Async Flow**: Fetches are performed via asynchronous `fetch` calls to local routes, ensuring the UI develops reactive loading patterns ready for real REST/GraphQL integration.
+### 3.1 Data Architecture
+ The application leverages a **modern server-side architecture** using Server Actions and PostgreSQL:
+ - **Server Actions**: All data mutations (Create, Update, Delete) are handled via Next.js Server Actions (see `lib/actions.ts`), ensuring type safety and security.
+ - **Database**: **PostgreSQL** is the persistent storage, managed via **Drizzle ORM**.
+ - **Data Fetching**: Server Components fetch data directly from the DB or via cached utility functions, providing fresh data without client-side waterfalls.
+ - **Seed Data**: Initial environment setup is handled via `scripts/seed.ts` to populate the database with realistic sample data.
 
 ### 3.2 Page Specifications
 - **Overview Dashboard**: High-level metrics for Total Income, Expenses, and Net Worth.
@@ -133,4 +134,16 @@ interface Goal {
 ## 5. Verification & Quality Standards
 - **Performance**: Page transitions < 1s; OCR processing < 3s.
 - **Accuracy**: Recommendation logic must handle edge cases (e.g., missing price history).
-- **Security**: Hardcoded `admin/admin` logic for prototype; AuthProvider persists state in `localStorage`.
+- **Security**: 
+  - **Global Guard**: The application uses a global protection strategy via `AuthContext`.
+    - All routes are protected by default.
+    - Unauthenticated access redirects execution to `/login` with a `returnUrl` parameter.
+    - The only public route is `/login` itself.
+  - **Credentials**: Hardcoded `admin/admin` logic for prototype.
+  - **Public Pages Strategy**:
+    - Current state: No public pages.
+    - **Extension Guide**: To introduce public pages (e.g., `/pricing`, `/about`):
+      1. Modify `components/AuthContext.tsx`.
+      2. Define a `PUBLIC_ROUTES` array (e.g., `const PUBLIC_ROUTES = ['/login', '/about'];`).
+      3. Update the `useEffect` guard to check if `pathname` is in `PUBLIC_ROUTES` before forcing a redirect.
+  - **State Persistence**: `AuthProvider` persists session state in `localStorage`.

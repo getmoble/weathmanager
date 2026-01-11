@@ -1,38 +1,56 @@
 import { Transaction, RecurringTransaction, Stock, Goal, Asset } from '@/types/types';
+import { getTransactions, getRecurringTransactions, getStocks, getGoals, getAssets, getBanks, getBrokers, getCategories as getCategoriesAction } from './actions';
 
 /**
- * DataService simulates an API layer by fetching local JSON files.
- * This architecture allows for easy replacement with a real backend later.
+ * DataService now bridges the Frontend to Server Actions (Database).
  */
 
-async function fetchFromApi<T>(path: string): Promise<T> {
-    const response = await fetch(`/data/${path}`);
-    if (!response.ok) {
-        throw new Error(`Failed to fetch data from ${path}`);
-    }
-    return response.json();
-}
-
 export const DataService = {
-    getTransactions: () => fetchFromApi<Transaction[]>('transactions.json'),
+    getTransactions: async (): Promise<Transaction[]> => {
+        const data = await getTransactions();
+        return data as unknown as Transaction[];
+    },
 
-    getRecurringTransactions: () => fetchFromApi<RecurringTransaction[]>('recurring.json'),
+    getRecurringTransactions: async (): Promise<RecurringTransaction[]> => {
+        const data = await getRecurringTransactions();
+        return data as unknown as RecurringTransaction[];
+    },
 
-    getStocks: () => fetchFromApi<Stock[]>('stocks.json'),
+    getStocks: async (): Promise<Stock[]> => {
+        const data = await getStocks();
+        return data as unknown as Stock[];
+    },
 
-    getBanks: () => fetchFromApi<any[]>('banks.json'),
+    getBanks: async (): Promise<any[]> => {
+        return await getBanks();
+    },
 
-    getBrokers: () => fetchFromApi<any[]>('brokers.json'),
+    getBrokers: async (): Promise<any[]> => {
+        return await getBrokers();
+    },
 
-    getCategories: () => fetchFromApi<{ income: string[], expense: string[] }>('categories.json'),
+    getCategories: async (): Promise<{ income: string[], expense: string[], assets: string[] }> => {
+        return await getCategoriesAction();
+    },
 
-    getGoals: () => fetchFromApi<Goal[]>('goals.json'),
-    getAssets: () => fetchFromApi<Asset[]>('assets.json'),
+    deleteCategory: async (name: string, type: string) => {
+        const { deleteCategory } = await import('./actions'); // Dynamic import to avoid circular dep if any (unlikely here but safe)
+        return await deleteCategory(name, type);
+    },
 
-    // Simulated POST methods (logic for local state would normally be more complex)
+    getGoals: async (): Promise<Goal[]> => {
+        const data = await getGoals();
+        return data as unknown as Goal[];
+    },
+
+    getAssets: async (): Promise<Asset[]> => {
+        const data = await getAssets();
+        return data as unknown as Asset[];
+    },
+
+    // TODO: Implement actual mutations
     addTransaction: async (transaction: Omit<Transaction, 'id'>) => {
-        console.log("Simulating API POST to /transactions", transaction);
-        // In a real scenario, you'd generate an ID and return the full Transaction
-        return { ...transaction, id: Math.random().toString(36).substring(2, 9) } as Transaction;
+        console.log("Add transaction not implemented in DB yet", transaction);
+        return { ...transaction, id: 'temp' } as Transaction;
     }
 };

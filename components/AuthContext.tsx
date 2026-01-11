@@ -1,6 +1,6 @@
 "use client"
 import React, { createContext, useContext, useState, useEffect, useLayoutEffect } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { User } from '@/types/types'
 
 interface AuthContextType {
@@ -21,6 +21,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null)
     const router = useRouter()
     const pathname = usePathname()
+    const searchParams = useSearchParams()
 
     // Use simple effect for initial load to avoid hydration mismatch
     useEffect(() => {
@@ -40,11 +41,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const stored = localStorage.getItem('wealth_user')
 
         if (!stored && !isLoginPage) {
-            router.push('/login')
+            router.push(`/login?returnUrl=${encodeURIComponent(pathname)}`)
         } else if (stored && isLoginPage) {
-            router.push('/dashboard')
+            const returnUrl = searchParams.get('returnUrl') || '/dashboard'
+            router.push(returnUrl)
         }
-    }, [pathname, router, user])
+    }, [pathname, router, user, searchParams])
 
     const login = (u: string, p: string) => {
         // Hardcoded credentials for local dev
@@ -52,7 +54,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const userObj: User = { id: '1', username: 'Admin User' }
             setUser(userObj)
             localStorage.setItem('wealth_user', JSON.stringify(userObj))
-            router.push('/dashboard')
+            const returnUrl = searchParams.get('returnUrl') || '/dashboard'
+            router.push(returnUrl)
             return true
         }
         return false
