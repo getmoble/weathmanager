@@ -10,6 +10,32 @@ export async function getTransactions() {
     return await db.select().from(transactions).orderBy(desc(transactions.date));
 }
 
+export async function createTransaction(data: any) {
+    const newId = crypto.randomUUID();
+    await db.insert(transactions).values({ ...data, id: newId });
+    revalidatePath('/dashboard/expenses');
+    revalidatePath('/dashboard/expenses/list');
+    return { success: true, id: newId };
+}
+
+export async function updateTransaction(id: string, data: any) {
+    // Remove undefined fields to avoid overwriting with null/undefined if partial update
+    const updateData = Object.fromEntries(
+        Object.entries(data).filter(([_, v]) => v !== undefined)
+    );
+    await db.update(transactions).set(updateData).where(eq(transactions.id, id));
+    revalidatePath('/dashboard/expenses');
+    revalidatePath('/dashboard/expenses/list');
+    return { success: true };
+}
+
+export async function deleteTransaction(id: string) {
+    await db.delete(transactions).where(eq(transactions.id, id));
+    revalidatePath('/dashboard/expenses');
+    revalidatePath('/dashboard/expenses/list');
+    return { success: true };
+}
+
 // Recurring
 export async function getRecurringTransactions() {
     return await db.select().from(recurringTransactions);

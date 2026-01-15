@@ -48,9 +48,23 @@ export const DataService = {
         return data as unknown as Asset[];
     },
 
-    // TODO: Implement actual mutations
+    // Actual mutations
     addTransaction: async (transaction: Omit<Transaction, 'id'>) => {
-        console.log("Add transaction not implemented in DB yet", transaction);
-        return { ...transaction, id: 'temp' } as Transaction;
+        const { createTransaction } = await import('./actions');
+        const res = await createTransaction(transaction);
+        if (res.success && res.id) {
+            return { ...transaction, id: res.id } as Transaction;
+        }
+        throw new Error("Failed to create transaction");
+    },
+
+    updateTransaction: async (id: string, transaction: Partial<Transaction>) => {
+        const { updateTransaction } = await import('./actions');
+        return await updateTransaction(id, transaction);
+    },
+
+    deleteTransaction: async (id: string) => {
+        const { deleteTransaction } = await import('./actions');
+        return await deleteTransaction(id);
     }
 };

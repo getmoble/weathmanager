@@ -8,11 +8,13 @@ import { SingleTransactionModal } from "@/components/SingleTransactionModal";
 import { MultipleTransactionsModal } from "@/components/MultipleTransactionsModal";
 import { SmartOCRModal } from "@/components/SmartOCRModal";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTransactions } from "@/lib/mockTransactionData";
+import { DataService } from "@/lib/dataService";
 import { generateExpenseSuggestions } from "@/lib/expenseAnalysis";
 import { Transaction, ExpenseSuggestion } from "@/types/types";
 import { TrendingDown, IndianRupee, Calendar, CreditCard, Sparkles, PieChart as PieChartIcon, TrendingUp } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const COLORS = ["#ef4444", "#f97316", "#f59e0b", "#8b5cf6", "#ec4899", "#3b82f6"];
 
@@ -24,43 +26,79 @@ export default function ExpenseDashboardPage() {
         categoryData: { name: string; value: number }[];
         monthlyData: { month: string; amount: number }[];
         suggestions: ExpenseSuggestion[];
+        trend: { value: number; isPositive: boolean };
     } | null>(null);
 
     useEffect(() => {
         async function loadData() {
-            const txs = await getTransactions();
-            const expenseTxs = txs.filter(t => t.type === 'expense');
+            try {
+                const txs = await DataService.getTransactions();
+                const expenseTxs = txs.filter(t => t.type === 'expense');
 
-            const totalExpenses = expenseTxs.reduce((sum, t) => sum + t.amount, 0);
+                const now = new Date();
+                const currentMonthKey = `${now.getFullYear()}-${now.getMonth()}`;
+                const prevMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                const prevMonthKey = `${prevMonthDate.getFullYear()}-${prevMonthDate.getMonth()}`;
 
-            // Group by category
-            const categories: Record<string, number> = {};
-            expenseTxs.forEach(t => {
-                categories[t.category] = (categories[t.category] || 0) + t.amount;
-            });
-            const categoryData = Object.entries(categories)
-                .map(([name, value]) => ({ name, value }))
-                .sort((a, b) => b.value - a.value);
+                // Calculate Month-over-Month Trend
+                let currentMonthTotal = 0;
+                let prevMonthTotal = 0;
 
-            // Group by month
-            const months: Record<string, number> = {};
-            expenseTxs.forEach(t => {
-                const month = new Date(t.date).toLocaleString('default', { month: 'short' });
-                months[month] = (months[month] || 0) + t.amount;
-            });
-            const monthlyData = Object.entries(months).map(([month, amount]) => ({ month, amount }));
+                const months: Record<string, number> = {};
+                const categories: Record<string, number> = {};
 
-            // Generate suggestions
-            const suggestions = generateExpenseSuggestions(expenseTxs, txs);
+                expenseTxs.forEach(t => {
+                    const d = new Date(t.date);
+                    const key = `${d.getFullYear()}-${d.getMonth()}`;
+                    const monthName = d.toLocaleString('default', { month: 'short' });
 
-            setExpenseData({
-                totalExpenses,
-                avgMonthly: totalExpenses / (monthlyData.length || 1),
-                transactions: expenseTxs.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
-                categoryData,
-                monthlyData,
-                suggestions
-            });
+                    // Montly Data for Chart
+                    months[monthName] = (months[monthName] || 0) + t.amount;
+
+                    // Category Data
+                    categories[t.category] = (categories[t.category] || 0) + t.amount;
+
+                    // Trend Calculation Buckets
+                    if (key === currentMonthKey) currentMonthTotal += t.amount;
+                    if (key === prevMonthKey) prevMonthTotal += t.amount;
+                });
+
+                const totalExpenses = expenseTxs.reduce((sum, t) => sum + t.amount, 0);
+
+                const categoryData = Object.entries(categories)
+                    .map(([name, value]) => ({ name, value }))
+                    .sort((a, b) => b.value - a.value);
+
+                const monthlyData = Object.entries(months).map(([month, amount]) => ({ month, amount }));
+
+                // Avoid division by zero
+                const trendValue = prevMonthTotal > 0
+                    ? ((currentMonthTotal - prevMonthTotal) / prevMonthTotal) * 100
+                    : 0;
+
+                const suggestions = generateExpenseSuggestions(
+                    expenseTxs.filter(t => {
+                        const d = new Date(t.date);
+                        return `${d.getFullYear()}-${d.getMonth()}` === currentMonthKey;
+                    }),
+                    expenseTxs
+                );
+
+                setExpenseData({
+                    totalExpenses,
+                    avgMonthly: totalExpenses / (Object.keys(months).length || 1),
+                    transactions: expenseTxs.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
+                    categoryData,
+                    monthlyData,
+                    suggestions,
+                    trend: {
+                        value: Math.abs(trendValue),
+                        isPositive: trendValue > 0
+                    }
+                });
+            } catch (error) {
+                console.error("Failed to load dashboard data", error);
+            }
         }
         loadData();
     }, []);
@@ -75,6 +113,9 @@ export default function ExpenseDashboardPage() {
                     <SingleTransactionModal type="expense" />
                     <MultipleTransactionsModal />
                     <SmartOCRModal />
+                    <Button variant="outline" asChild>
+                        <Link href="/dashboard/expenses/list">View All</Link>
+                    </Button>
                 </div>
             </div>
 
@@ -83,7 +124,7 @@ export default function ExpenseDashboardPage() {
                     title="Total Expenses"
                     value={`₹${expenseData.totalExpenses.toLocaleString('en-IN')}`}
                     icon={TrendingDown}
-                    trend={{ value: 4.2, isPositive: false }}
+                    trend={expenseData.trend}
                     description="vs last month"
                     valueClassName="text-red-500"
                 />
