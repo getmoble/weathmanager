@@ -45,6 +45,11 @@ const items = [
         icon: Landmark,
     },
     {
+        title: "Liabilities",
+        url: "/dashboard/liabilities",
+        icon: Landmark, // Will use Landmark for now, similar to Assets
+    },
+    {
         title: "Reports",
         url: "/dashboard/reports",
         icon: FileText,

@@ -86,3 +86,16 @@ export const categories = pgTable('categories', {
     name: text('name').notNull(),
     type: text('type').notNull(), // 'income' | 'expense' | 'asset'
 });
+
+export const liabilities = pgTable('liabilities', {
+    id: text('id').primaryKey(),
+    name: text('name').notNull(),
+    type: text('type').notNull(),
+    totalAmount: doublePrecision('total_amount').notNull(),
+    outstandingAmount: doublePrecision('outstanding_amount').notNull(),
+    interestRate: doublePrecision('interest_rate').notNull(),
+    monthlyPayment: doublePrecision('monthly_payment'), // Added EMI
+    startDate: text('start_date').notNull(),
+    endDate: text('end_date'),
+    notes: text('notes'),
+});

@@ -1,4 +1,4 @@
-import { Transaction, RecurringTransaction, Stock, Goal, Asset } from '@/types/types';
+import { Transaction, RecurringTransaction, Stock, Goal, Asset, Liability } from '@/types/types';
 import { getTransactions, getRecurringTransactions, getStocks, getGoals, getAssets, getBanks, getBrokers, getCategories as getCategoriesAction } from './actions';
 
 /**
@@ -9,6 +9,15 @@ export const DataService = {
     getTransactions: async (): Promise<Transaction[]> => {
         const data = await getTransactions();
         return data as unknown as Transaction[];
+    },
+
+    getPaginatedTransactions: async (params: any): Promise<{ data: Transaction[], total: number }> => {
+        const { getPaginatedTransactions } = await import('./actions');
+        const res = await getPaginatedTransactions(params);
+        return {
+            data: res.data as unknown as Transaction[],
+            total: res.total
+        };
     },
 
     getRecurringTransactions: async (): Promise<RecurringTransaction[]> => {
@@ -29,7 +38,7 @@ export const DataService = {
         return await getBrokers();
     },
 
-    getCategories: async (): Promise<{ income: string[], expense: string[], assets: string[] }> => {
+    getCategories: async (): Promise<{ income: string[], expense: string[], assets: string[], liabilities: string[] }> => {
         return await getCategoriesAction();
     },
 
@@ -46,6 +55,12 @@ export const DataService = {
     getAssets: async (): Promise<Asset[]> => {
         const data = await getAssets();
         return data as unknown as Asset[];
+    },
+
+    getLiabilities: async (): Promise<Liability[]> => {
+        const { getLiabilities } = await import('./actions');
+        const data = await getLiabilities();
+        return data as unknown as Liability[];
     },
 
     // Actual mutations
@@ -66,5 +81,20 @@ export const DataService = {
     deleteTransaction: async (id: string) => {
         const { deleteTransaction } = await import('./actions');
         return await deleteTransaction(id);
+    },
+
+    addLiability: async (liability: Liability) => {
+        const { createLiability } = await import('./actions');
+        return await createLiability(liability);
+    },
+
+    updateLiability: async (id: string, liability: Partial<Liability>) => {
+        const { updateLiability } = await import('./actions');
+        return await updateLiability(id, liability);
+    },
+
+    deleteLiability: async (id: string) => {
+        const { deleteLiability } = await import('./actions');
+        return await deleteLiability(id);
     }
 };

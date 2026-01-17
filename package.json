@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "db:push": "drizzle-kit push",
-    "db:seed": "tsx scripts/seed.ts"
+    "db:seed": "tsx scripts/seed.ts",
+    "db:seed:csv": "tsx scripts/seed-from-csv.ts"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.11",

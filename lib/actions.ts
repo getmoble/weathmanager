@@ -1,13 +1,63 @@
 'use server'
 
 import { db } from './db';
-import { transactions, recurringTransactions, stocks, goals, assets, banks, brokers, categories } from './db/schema';
-import { eq, desc } from 'drizzle-orm';
+import { transactions, recurringTransactions, stocks, goals, assets, banks, brokers, categories, liabilities } from './db/schema';
+import { eq, desc, and, gte, lte, ilike, sql, count } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 // Transactions
 export async function getTransactions() {
     return await db.select().from(transactions).orderBy(desc(transactions.date));
+}
+
+export interface PaginatedTransactionsParams {
+    limit: number;
+    offset: number;
+    type?: 'income' | 'expense' | 'investment';
+    startDate?: string;
+    endDate?: string;
+    category?: string;
+    source?: 'all' | 'manual' | 'recurring';
+    searchQuery?: string;
+}
+
+export async function getPaginatedTransactions(params: PaginatedTransactionsParams) {
+    const { limit, offset, type, startDate, endDate, category, source, searchQuery } = params;
+
+    const filters = [];
+
+    if (type) filters.push(eq(transactions.type, type));
+    if (category && category !== 'all') filters.push(eq(transactions.category, category));
+
+    if (source === 'manual') filters.push(eq(transactions.isRecurring, false));
+    if (source === 'recurring') filters.push(eq(transactions.isRecurring, true));
+
+    if (startDate) filters.push(gte(transactions.date, startDate));
+    if (endDate) filters.push(lte(transactions.date, endDate));
+
+    if (searchQuery) {
+        filters.push(
+            sql`(${transactions.description} ILIKE ${'%' + searchQuery + '%'} OR ${transactions.category} ILIKE ${'%' + searchQuery + '%'})`
+        );
+    }
+
+    const whereClause = filters.length > 0 ? and(...filters) : undefined;
+
+    const data = await db.select()
+        .from(transactions)
+        .where(whereClause)
+        .orderBy(desc(transactions.date))
+        .limit(limit)
+        .offset(offset);
+
+    const [totalCountResult] = await db.select({ count: count() })
+        .from(transactions)
+        .where(whereClause);
+
+    return {
+        data,
+        total: totalCountResult.count ?? 0
+    };
 }
 
 export async function createTransaction(data: any) {
@@ -100,6 +150,36 @@ export async function deleteAsset(id: string) {
     return { success: true };
 }
 
+// Liabilities
+export async function getLiabilities() {
+    const data = await db.select().from(liabilities);
+    return data.map(l => ({
+        ...l,
+        emi: l.monthlyPayment // Map DB name to frontend name
+    }));
+}
+
+export async function createLiability(data: any) {
+    await db.insert(liabilities).values(data);
+    revalidatePath('/dashboard/settings');
+    revalidatePath('/dashboard/liabilities');
+    return { success: true };
+}
+
+export async function updateLiability(id: string, data: any) {
+    await db.update(liabilities).set(data).where(eq(liabilities.id, id));
+    revalidatePath('/dashboard/settings');
+    revalidatePath('/dashboard/liabilities');
+    return { success: true };
+}
+
+export async function deleteLiability(id: string) {
+    await db.delete(liabilities).where(eq(liabilities.id, id));
+    revalidatePath('/dashboard/settings');
+    revalidatePath('/dashboard/liabilities');
+    return { success: true };
+}
+
 // Banks
 export async function getBanks() {
     return await db.select().from(banks);
@@ -154,6 +234,7 @@ export async function getCategories() {
         income: allParams.filter(c => c.type === 'income').map(c => c.name),
         expense: allParams.filter(c => c.type === 'expense').map(c => c.name),
         assets: allParams.filter(c => c.type === 'asset').map(c => c.name),
+        liabilities: allParams.filter(c => c.type === 'liability').map(c => c.name),
         // Return full objects if needed for deletion, or we can find by name + type
         all: allParams
     };

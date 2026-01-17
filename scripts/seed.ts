@@ -2,6 +2,9 @@ import { db } from '../lib/db';
 import { transactions, recurringTransactions, stocks, goals, assets, banks, brokers, categories } from '../lib/db/schema';
 import fs from 'fs';
 import path from 'path';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: '.env.local' });
 
 async function seed() {
     console.log('Seeding database...');

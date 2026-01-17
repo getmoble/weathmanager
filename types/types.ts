@@ -150,3 +150,16 @@ export interface Goal {
   monthlyContribution: number;
   expectedReturn: number;
 }
+
+export interface Liability {
+  id: string;
+  name: string;
+  type: string;
+  totalAmount: number;
+  outstandingAmount: number;
+  interestRate: number;
+  emi?: number;
+  startDate: string;
+  endDate?: string;
+  notes?: string;
+}

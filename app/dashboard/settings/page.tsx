@@ -26,7 +26,9 @@ export default function SettingsPage() {
                 <TabsList className="flex flex-col h-auto bg-slate-50/50 dark:bg-zinc-900/50 border-r rounded-none p-1 items-start space-y-0 w-full md:w-48 shrink-0">
                     <TabsTrigger value="goals" className="w-full justify-start gap-2 h-9">Goals</TabsTrigger>
                     <TabsTrigger value="assets" className="w-full justify-start gap-2 h-9">Assets</TabsTrigger>
+                    <TabsTrigger value="liabilities" className="w-full justify-start gap-2 h-9">Liabilities</TabsTrigger>
                     <TabsTrigger value="asset-categories" className="w-full justify-start gap-2 h-9">Asset Categories</TabsTrigger>
+                    <TabsTrigger value="liability-categories" className="w-full justify-start gap-2 h-9">Liability Categories</TabsTrigger>
                     <TabsTrigger value="income-categories" className="w-full justify-start gap-2 h-9">Income Categories</TabsTrigger>
                     <TabsTrigger value="expense-categories" className="w-full justify-start gap-2 h-9">Expense Categories</TabsTrigger>
                     <TabsTrigger value="brokers" className="w-full justify-start gap-2 h-9">Brokers</TabsTrigger>
@@ -36,7 +38,9 @@ export default function SettingsPage() {
                 <div className="flex-1 p-6 bg-white dark:bg-zinc-950 overflow-y-auto">
                     <TabsContent value="goals" className="mt-0"> <GoalManagement /> </TabsContent>
                     <TabsContent value="assets" className="mt-0"> <AssetManagement /> </TabsContent>
+                    <TabsContent value="liabilities" className="mt-0"> <LiabilityManagement /> </TabsContent>
                     <TabsContent value="asset-categories" className="mt-0"> <CategoryManagement type="asset" label="Asset Categories" icon={Landmark} /> </TabsContent>
+                    <TabsContent value="liability-categories" className="mt-0"> <CategoryManagement type="liability" label="Liability Categories" icon={CreditCard} /> </TabsContent>
                     <TabsContent value="income-categories" className="mt-0"> <CategoryManagement type="income" label="Income Categories" icon={TrendingUp} /> </TabsContent>
                     <TabsContent value="expense-categories" className="mt-0"> <CategoryManagement type="expense" label="Expense Categories" icon={CreditCard} /> </TabsContent>
                     <TabsContent value="brokers" className="mt-0"> <BrokerManagement /> </TabsContent>
@@ -277,6 +281,133 @@ function AssetManagement() {
                         <div className="grid gap-2">
                             <Label>Location</Label>
                             <Input name="location" defaultValue={editing?.location} />
+                        </div>
+                        <DialogFooter><Button type="submit">{editing ? 'Update' : 'Create'}</Button></DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
+        </div>
+    );
+}
+
+// --- LIABILITIES ---
+function LiabilityManagement() {
+    const [liabilities, setLiabilities] = useState<any[]>([]);
+    const [isOpen, setIsOpen] = useState(false);
+    const [editing, setEditing] = useState<any>(null);
+    const router = useRouter();
+
+    const refresh = async () => {
+        const data = await DataService.getLiabilities();
+        setLiabilities(data);
+        router.refresh();
+    };
+
+    useEffect(() => { refresh(); }, []);
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const data = {
+            name: formData.get('name') as string,
+            type: formData.get('type') as string,
+            totalAmount: Number(formData.get('totalAmount')),
+            outstandingAmount: Number(formData.get('outstandingAmount')),
+            interestRate: Number(formData.get('interestRate')),
+            emi: Number(formData.get('emi')) || undefined,
+            startDate: formData.get('startDate') as string,
+            endDate: (formData.get('endDate') as string) || undefined,
+            notes: (formData.get('notes') as string) || undefined,
+        };
+
+        if (editing) {
+            await DataService.updateLiability(editing.id, data);
+        } else {
+            await DataService.addLiability(data as any);
+        }
+        setIsOpen(false);
+        setEditing(null);
+        refresh();
+    };
+
+    const handleDelete = async (id: string) => {
+        await DataService.deleteLiability(id);
+        refresh();
+    }
+
+    return (
+        <div className="space-y-4">
+            <div className="flex justify-between items-center">
+                <h2 className="text-xl font-semibold">Liabilities & Debts</h2>
+                <Button onClick={() => { setEditing(null); setIsOpen(true); }} size="sm"><Plus className="h-4 w-4 mr-2" /> Add Liability</Button>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {liabilities.map((l) => (
+                    <Card key={l.id} className="relative border-rose-500/20">
+                        <CardHeader className="pb-2">
+                            <div className="flex items-center justify-between">
+                                <CardTitle className="text-lg">{l.name}</CardTitle>
+                                <Badge variant="outline" className="border-rose-200 text-rose-700 bg-rose-50">{l.type}</Badge>
+                            </div>
+                            <CardDescription>{l.interestRate}% Interest</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold text-rose-600">₹{l.outstandingAmount?.toLocaleString('en-IN')}</div>
+                            <div className="text-xs text-muted-foreground">Original: ₹{l.totalAmount?.toLocaleString('en-IN')}</div>
+                        </CardContent>
+                        <CardFooter className="flex justify-between border-t p-2 bg-muted/30">
+                            <Button variant="ghost" size="sm" onClick={() => { setEditing(l); setIsOpen(true); }}><Edit2 className="h-3 w-3 mr-1" /> Edit</Button>
+                            <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={() => handleDelete(l.id)}><Trash2 className="h-3 w-3 mr-1" /> Delete</Button>
+                        </CardFooter>
+                    </Card>
+                ))}
+            </div>
+
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                <DialogContent>
+                    <DialogHeader><DialogTitle>{editing ? 'Edit Liability' : 'New Liability'}</DialogTitle></DialogHeader>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="grid gap-2">
+                            <Label>Liability Name</Label>
+                            <Input name="name" defaultValue={editing?.name} required placeholder="e.g. Home Loan" />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label>Type</Label>
+                            <Input name="type" defaultValue={editing?.type || 'Home Loan'} placeholder="e.g. Credit Card, Personal Loan" required />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="grid gap-2">
+                                <Label>Total Amount (₹)</Label>
+                                <Input name="totalAmount" type="number" defaultValue={editing?.totalAmount} required />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label>Outstanding (₹)</Label>
+                                <Input name="outstandingAmount" type="number" defaultValue={editing?.outstandingAmount} required />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="grid gap-2">
+                                <Label>Interest Rate (%)</Label>
+                                <Input name="interestRate" type="number" step="0.01" defaultValue={editing?.interestRate} required />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label>Start Date</Label>
+                                <Input name="startDate" type="date" defaultValue={editing?.startDate} required />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="grid gap-2">
+                                <Label>EMI (Monthly Payment ₹)</Label>
+                                <Input name="emi" type="number" defaultValue={editing?.emi} placeholder="Optional" />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label>End Date (Optional)</Label>
+                                <Input name="endDate" type="date" defaultValue={editing?.endDate} />
+                            </div>
+                        </div>
+                        <div className="grid gap-2">
+                            <Label>Notes</Label>
+                            <Input name="notes" defaultValue={editing?.notes} />
                         </div>
                         <DialogFooter><Button type="submit">{editing ? 'Update' : 'Create'}</Button></DialogFooter>
                     </form>

@@ -4,19 +4,18 @@ import { useEffect, useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ExpenseTable } from "@/components/ExpenseTable";
-import { ExpenseFilter, ExpenseFilters } from "@/components/ExpenseFilter";
-import { SingleTransactionModal } from "@/components/SingleTransactionModal"; // Updated to support edit
+import { IncomeTable } from "@/components/IncomeTable";
+import { ExpenseFilter, ExpenseFilters } from "@/components/ExpenseFilter"; // Reusing filter component
+import { SingleTransactionModal } from "@/components/SingleTransactionModal";
 import { DataService } from "@/lib/dataService";
 import { Transaction } from "@/types/types";
 import { Search, Filter, Download, Plus, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Pagination } from "@/components/ui/pagination";
-
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-export default function ExpensesListPage() {
+export default function IncomeListPage() {
     const router = useRouter();
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [loading, setLoading] = useState(true);
@@ -55,7 +54,7 @@ export default function ExpensesListPage() {
             const res = await DataService.getPaginatedTransactions({
                 limit: pageSize,
                 offset: (currentPage - 1) * pageSize,
-                type: 'expense',
+                type: 'income',
                 startDate: filters.startDate,
                 endDate: filters.endDate,
                 category: filters.category,
@@ -71,33 +70,26 @@ export default function ExpensesListPage() {
         }
     };
 
-    // Derived Categories - we still need this for the filter
-    // We'll fetch all categories once
     const [categories, setCategories] = useState<string[]>([]);
     useEffect(() => {
-        DataService.getCategories().then(res => setCategories(res.expense));
+        DataService.getCategories().then(res => setCategories(res.income));
     }, []);
 
-    // Pagination Logic
     const totalPages = Math.ceil(total / pageSize);
 
-    // Handlers
     const handleDelete = async (id: string) => {
-        if (confirm("Are you sure you want to delete this expense?")) {
+        if (confirm("Are you sure you want to delete this income record?")) {
             await DataService.deleteTransaction(id);
-            loadData(); // Re-fetch current page
+            loadData();
         }
     };
 
     const handleDownloadCSV = async () => {
-        // For CSV export, we might want to fetch ALL matching records or just current page.
-        // Usually, export means ALL. But for simplicity here, let's export ALL matching.
-        // We'll fetch all without limit/offset (or large limit)
         try {
             const res = await DataService.getPaginatedTransactions({
                 limit: 10000,
                 offset: 0,
-                type: 'expense',
+                type: 'income',
                 startDate: filters.startDate,
                 endDate: filters.endDate,
                 category: filters.category,
@@ -124,7 +116,7 @@ export default function ExpensesListPage() {
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.setAttribute("href", url);
-            link.setAttribute("download", `expenses_export_${new Date().toISOString().split('T')[0]}.csv`);
+            link.setAttribute("download", `income_export_${new Date().toISOString().split('T')[0]}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -137,22 +129,22 @@ export default function ExpensesListPage() {
         <div className="space-y-6">
             <div className="flex items-center gap-4">
                 <Button variant="ghost" size="icon" asChild>
-                    <Link href="/dashboard/expenses">
+                    <Link href="/dashboard/income">
                         <ArrowLeft className="h-5 w-5" />
                     </Link>
                 </Button>
                 <div>
-                    <h1 className="text-3xl font-bold">All Expenses</h1>
-                    <p className="text-muted-foreground">Manage and track your spending history.</p>
+                    <h1 className="text-3xl font-bold">All Incomes</h1>
+                    <p className="text-muted-foreground">Manage and track your income sources.</p>
                 </div>
                 <div className="ml-auto">
                     <SingleTransactionModal
-                        type="expense"
+                        type="income"
                         onSave={loadData}
                         trigger={
                             <Button size="sm" className="h-9">
                                 <Plus className="h-4 w-4 mr-2" />
-                                Add Expense
+                                Add Income
                             </Button>
                         }
                     />
@@ -185,14 +177,15 @@ export default function ExpensesListPage() {
                 </CardHeader>
                 <CardContent>
                     {loading ? (
-                        <div className="text-center py-8">Loading expenses...</div>
+                        <div className="text-center py-8">Loading incomes...</div>
                     ) : (
                         <>
-                            <ExpenseTable
+                            <IncomeTable
                                 transactions={transactions}
                                 onEdit={(t) => setEditingTransaction(t)}
                                 onDelete={handleDelete}
                             />
+
                             <div className="mt-4 flex flex-col md:flex-row items-center justify-between gap-4">
                                 <div className="flex items-center gap-2 order-2 md:order-1">
                                     <span className="text-sm text-muted-foreground whitespace-nowrap">Show:</span>
@@ -233,18 +226,15 @@ export default function ExpensesListPage() {
                 categories={categories}
             />
 
-            {/* Hidden Edit Modal - conditionally rendered when we have a transaction to edit */}
             {editingTransaction && (
                 <SingleTransactionModal
-                    type="expense"
+                    type="income"
                     transactionToEdit={editingTransaction}
                     onClose={() => setEditingTransaction(null)}
                     onSave={() => {
                         loadData();
                         setEditingTransaction(null);
                     }}
-                    // Force mount/remount to reset internal state if needed, though key or useEffect inside modal handles it
-                    // But key is safest
                     key={editingTransaction.id}
                 />
             )}

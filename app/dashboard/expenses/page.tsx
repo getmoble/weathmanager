@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { MetricCard } from "@/components/MetricCard";
-import { TransactionTable } from "@/components/TransactionTable";
+import { ExpenseTable } from "@/components/ExpenseTable";
 import { ExpenseReductionSuggestion } from "@/components/ExpenseReductionSuggestion";
 import { SingleTransactionModal } from "@/components/SingleTransactionModal";
 import { MultipleTransactionsModal } from "@/components/MultipleTransactionsModal";
@@ -29,79 +29,95 @@ export default function ExpenseDashboardPage() {
         trend: { value: number; isPositive: boolean };
     } | null>(null);
 
-    useEffect(() => {
-        async function loadData() {
-            try {
-                const txs = await DataService.getTransactions();
-                const expenseTxs = txs.filter(t => t.type === 'expense');
+    // Edit Modal State
+    const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
 
-                const now = new Date();
-                const currentMonthKey = `${now.getFullYear()}-${now.getMonth()}`;
-                const prevMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-                const prevMonthKey = `${prevMonthDate.getFullYear()}-${prevMonthDate.getMonth()}`;
+    const loadData = useCallback(async () => {
+        try {
+            // Fetch only the latest 15 expenses as requested
+            const res = await DataService.getPaginatedTransactions({
+                limit: 15,
+                offset: 0,
+                type: 'expense'
+            });
+            const expenseTxs = res.data;
 
-                // Calculate Month-over-Month Trend
-                let currentMonthTotal = 0;
-                let prevMonthTotal = 0;
+            const now = new Date();
+            const currentMonthKey = `${now.getFullYear()}-${now.getMonth()}`;
+            const prevMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+            const prevMonthKey = `${prevMonthDate.getFullYear()}-${prevMonthDate.getMonth()}`;
 
-                const months: Record<string, number> = {};
-                const categories: Record<string, number> = {};
+            // Calculate Month-over-Month Trend
+            let currentMonthTotal = 0;
+            let prevMonthTotal = 0;
 
-                expenseTxs.forEach(t => {
+            const months: Record<string, number> = {};
+            const categories: Record<string, number> = {};
+
+            expenseTxs.forEach(t => {
+                const d = new Date(t.date);
+                const key = `${d.getFullYear()}-${d.getMonth()}`;
+                const monthName = d.toLocaleString('default', { month: 'short' });
+
+                // Montly Data for Chart
+                months[monthName] = (months[monthName] || 0) + t.amount;
+
+                // Category Data
+                categories[t.category] = (categories[t.category] || 0) + t.amount;
+
+                // Trend Calculation Buckets
+                if (key === currentMonthKey) currentMonthTotal += t.amount;
+                if (key === prevMonthKey) prevMonthTotal += t.amount;
+            });
+
+            const totalExpenses = expenseTxs.reduce((sum, t) => sum + t.amount, 0);
+
+            const categoryData = Object.entries(categories)
+                .map(([name, value]) => ({ name, value }))
+                .sort((a, b) => b.value - a.value);
+
+            const monthlyData = Object.entries(months).map(([month, amount]) => ({ month, amount }));
+
+            // Avoid division by zero
+            const trendValue = prevMonthTotal > 0
+                ? ((currentMonthTotal - prevMonthTotal) / prevMonthTotal) * 100
+                : 0;
+
+            const suggestions = generateExpenseSuggestions(
+                expenseTxs.filter(t => {
                     const d = new Date(t.date);
-                    const key = `${d.getFullYear()}-${d.getMonth()}`;
-                    const monthName = d.toLocaleString('default', { month: 'short' });
+                    return `${d.getFullYear()}-${d.getMonth()}` === currentMonthKey;
+                }),
+                expenseTxs
+            );
 
-                    // Montly Data for Chart
-                    months[monthName] = (months[monthName] || 0) + t.amount;
-
-                    // Category Data
-                    categories[t.category] = (categories[t.category] || 0) + t.amount;
-
-                    // Trend Calculation Buckets
-                    if (key === currentMonthKey) currentMonthTotal += t.amount;
-                    if (key === prevMonthKey) prevMonthTotal += t.amount;
-                });
-
-                const totalExpenses = expenseTxs.reduce((sum, t) => sum + t.amount, 0);
-
-                const categoryData = Object.entries(categories)
-                    .map(([name, value]) => ({ name, value }))
-                    .sort((a, b) => b.value - a.value);
-
-                const monthlyData = Object.entries(months).map(([month, amount]) => ({ month, amount }));
-
-                // Avoid division by zero
-                const trendValue = prevMonthTotal > 0
-                    ? ((currentMonthTotal - prevMonthTotal) / prevMonthTotal) * 100
-                    : 0;
-
-                const suggestions = generateExpenseSuggestions(
-                    expenseTxs.filter(t => {
-                        const d = new Date(t.date);
-                        return `${d.getFullYear()}-${d.getMonth()}` === currentMonthKey;
-                    }),
-                    expenseTxs
-                );
-
-                setExpenseData({
-                    totalExpenses,
-                    avgMonthly: totalExpenses / (Object.keys(months).length || 1),
-                    transactions: expenseTxs.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
-                    categoryData,
-                    monthlyData,
-                    suggestions,
-                    trend: {
-                        value: Math.abs(trendValue),
-                        isPositive: trendValue > 0
-                    }
-                });
-            } catch (error) {
-                console.error("Failed to load dashboard data", error);
-            }
+            setExpenseData({
+                totalExpenses,
+                avgMonthly: totalExpenses / (Object.keys(months).length || 1),
+                transactions: expenseTxs.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
+                categoryData,
+                monthlyData,
+                suggestions,
+                trend: {
+                    value: Math.abs(trendValue),
+                    isPositive: trendValue > 0
+                }
+            });
+        } catch (error) {
+            console.error("Failed to load dashboard data", error);
         }
-        loadData();
     }, []);
+
+    useEffect(() => {
+        loadData();
+    }, [loadData]);
+
+    const handleDelete = async (id: string) => {
+        if (confirm("Are you sure you want to delete this expense?")) {
+            await DataService.deleteTransaction(id);
+            loadData();
+        }
+    };
 
     if (!expenseData) return <div className="p-8">Loading expense data...</div>;
 
@@ -231,9 +247,27 @@ export default function ExpenseDashboardPage() {
                     <CardDescription>Detailed transaction history</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <TransactionTable transactions={expenseData.transactions} />
+                    <ExpenseTable
+                        transactions={expenseData.transactions}
+                        onEdit={(t) => setEditingTransaction(t)}
+                        onDelete={handleDelete}
+                    />
                 </CardContent>
             </Card>
+
+            {/* Hidden Edit Modal */}
+            {editingTransaction && (
+                <SingleTransactionModal
+                    type="expense"
+                    transactionToEdit={editingTransaction}
+                    onClose={() => setEditingTransaction(null)}
+                    onSave={() => {
+                        loadData();
+                        setEditingTransaction(null);
+                    }}
+                    key={editingTransaction.id}
+                />
+            )}
         </div>
     );
 }

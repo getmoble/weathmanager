@@ -2,19 +2,18 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Transaction } from "@/types/types";
-import { TrendingDown, MoreHorizontal, RefreshCw, Hand } from "lucide-react";
+import { TrendingUp, MoreHorizontal, RefreshCw, Hand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-
 import { format } from "date-fns";
 
-interface ExpenseTableProps {
+interface IncomeTableProps {
     transactions: Transaction[];
     onEdit: (transaction: Transaction) => void;
     onDelete: (id: string) => void;
 }
 
-export function ExpenseTable({ transactions, onEdit, onDelete }: ExpenseTableProps) {
+export function IncomeTable({ transactions, onEdit, onDelete }: IncomeTableProps) {
     return (
         <div className="rounded-md border overflow-hidden">
             <Table>
@@ -32,7 +31,7 @@ export function ExpenseTable({ transactions, onEdit, onDelete }: ExpenseTablePro
                     {transactions.length === 0 ? (
                         <TableRow>
                             <TableCell colSpan={6} className="h-24 text-center">
-                                No expenses found matching your criteria.
+                                No income records found matching your criteria.
                             </TableCell>
                         </TableRow>
                     ) : (
@@ -43,7 +42,7 @@ export function ExpenseTable({ transactions, onEdit, onDelete }: ExpenseTablePro
                                 </TableCell>
                                 <TableCell className="font-medium">{t.description}</TableCell>
                                 <TableCell>
-                                    <span className="inline-flex items-center rounded-full bg-muted/50 px-2.5 py-0.5 text-xs font-semibold text-muted-foreground/80 border border-muted-foreground/10 uppercase tracking-tighter">
+                                    <span className="inline-flex items-center rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-600 border border-emerald-500/10 uppercase tracking-tighter">
                                         {t.category}
                                     </span>
                                 </TableCell>
@@ -51,19 +50,19 @@ export function ExpenseTable({ transactions, onEdit, onDelete }: ExpenseTablePro
                                     <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                                         {t.isRecurring ? (
                                             <>
-                                                <RefreshCw className="h-3 w-3" />
+                                                <RefreshCw className="h-3 w-3 text-emerald-500" />
                                                 <span>Recurring</span>
                                             </>
                                         ) : (
                                             <>
-                                                <Hand className="h-3 w-3" />
+                                                <Hand className="h-3 w-3 text-emerald-500" />
                                                 <span>Manual</span>
                                             </>
                                         )}
                                     </div>
                                 </TableCell>
-                                <TableCell className="text-right font-bold text-rose-500 tabular-nums">
-                                    -₹{t.amount.toLocaleString('en-IN')}
+                                <TableCell className="text-right font-bold text-emerald-500 tabular-nums">
+                                    +₹{t.amount.toLocaleString('en-IN')}
                                 </TableCell>
                                 <TableCell>
                                     <DropdownMenu>

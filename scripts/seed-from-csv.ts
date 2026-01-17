@@ -7,7 +7,7 @@ import crypto from "crypto";
 import dotenv from "dotenv";
 
 // Load env vars from project root
-dotenv.config({ path: path.join(process.cwd(), '.env') });
+dotenv.config({ path: path.join(process.cwd(), '.env.local') });
 
 // Mapping of Items to Categories and Types
 const CATEGORY_MAP: Record<string, { type: 'income' | 'expense' | 'investment'; category: string }> = {
@@ -24,7 +24,6 @@ const CATEGORY_MAP: Record<string, { type: 'income' | 'expense' | 'investment'; 
     "Home Loan": { type: 'expense', category: 'Loan' },
     "Dad LIC": { type: 'expense', category: 'Insurance' },
     "Term Insurance": { type: 'expense', category: 'Insurance' },
-    "Term Insurance Axis": { type: 'expense', category: 'Insurance' },
     "Medical Insurance": { type: 'expense', category: 'Insurance' },
     "Phone Bill": { type: 'expense', category: 'Utilities' },
     "A 302 Rent + Maintenance": { type: 'expense', category: 'Rent' },
